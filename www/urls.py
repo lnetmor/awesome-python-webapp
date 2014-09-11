@@ -134,16 +134,20 @@ def register():
 @get('/manage/blogs/create')
 def manage_blog_edit():
 	ctx.request.user = User.find_first('where email=?', 'linli.cro@gmail.com')
-	return dict(id=None, action='api/blogs', redirect='/manage/blogs', user=ctx.request.user)
+	return dict(id=None, action='/api/blogs', redirect='/manage/blogs', user=ctx.request.user)
 
 @api
-@post('api/blogs')
+@post('/api/blogs')
 def api_create_blog():
+	ctx.request.user = User.find_first('where email=?', 'linli.cro@gmail.com')
 	check_admin()
 	i = ctx.request.input(name='', summary='', content='')
 	name = i.name.strip()
 	summary = i.summary.strip()
 	content = i.content.strip()
+
+	print name, summary, content
+
 	if not name:
 		raise APIValueError('name', 'name cannot be empty.')
 	if not summary:
